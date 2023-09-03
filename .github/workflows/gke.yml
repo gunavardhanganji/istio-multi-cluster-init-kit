@@ -15,8 +15,6 @@ jobs:
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: 4.80.0  # Replace with your desired Terraform version
 
     - name: Authenticate with Google Cloud
       uses: google-github-actions/setup-gcloud@v1
