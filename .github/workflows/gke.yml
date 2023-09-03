@@ -16,23 +16,21 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
 
-    - name: Authenticate with Google Cloud
-      uses: google-github-actions/setup-gcloud@v1
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        export_default_credentials: true
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
     - name: Initialize Terraform
       run: terraform init
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+      working-directory: ./terraform
 
     - name: Apply Terraform Plan
       run: terraform apply -auto-approve
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+      working-directory: ./terraform
 
     - name: Show GKE Cluster Information
+    working-directory: ./terraform
       run: |
         terraform output -json  # You can customize this based on your Terraform output
