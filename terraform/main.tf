@@ -12,5 +12,5 @@ module "cluster-1-node-pool" {
     cluster_name = "cluster-1"
     location = "us-central1-c"
     machine_type = "n1-standard-2"
-    service_account = "k8s-sa@istiosetup.iam.gserviceaccount.com"
+    service_account = "785799636758-compute@developer.gserviceaccount.com"
 }
