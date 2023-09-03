@@ -1,5 +1,10 @@
 name: Create GKE Cluster
 
+on:
+  push:
+    branches:
+      - feat/k8s  # Replace with the branch you want to trigger this workflow on
+
 jobs:
   create_cluster:
     runs-on: ubuntu-latest
