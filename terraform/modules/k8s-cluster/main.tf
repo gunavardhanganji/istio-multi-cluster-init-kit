@@ -16,3 +16,7 @@ resource "google_container_cluster" "primary" {
   }
   
 }
+
+output "cluster_name_output" {
+    value = google_container_cluster.primary.name
+}
