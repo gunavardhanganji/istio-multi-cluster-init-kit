@@ -9,5 +9,5 @@ terraform {
 
 provider "google" {
   # credentials = file("../sa-keys/istiosetup-6fb645a43e5e.json")
-  project = "istio-setup"
+  project = "istiosetup"
 }
