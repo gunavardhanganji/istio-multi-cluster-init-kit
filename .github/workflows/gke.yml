@@ -31,6 +31,6 @@ jobs:
       working-directory: ./terraform
 
     - name: Show GKE Cluster Information
-    working-directory: ./terraform
+      working-directory: ./terraform
       run: |
         terraform output -json  # You can customize this based on your Terraform output
