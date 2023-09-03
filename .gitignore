@@ -2,3 +2,6 @@ example_certs*
 generate-certs/certs
 install-istio/istiod-values-*
 tmp
+terraform/.terraform*
+terraform/terraform.tfstate
+sa-keys
