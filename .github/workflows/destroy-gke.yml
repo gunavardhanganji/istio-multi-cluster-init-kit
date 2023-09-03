@@ -1,4 +1,4 @@
-name: Create GKE Cluster
+name: Destroy GKE Cluster
 
 on:
   push:
@@ -27,5 +27,5 @@ jobs:
       working-directory: ./terraform
 
     - name: Apply Terraform Plan
-      run: terraform apply -auto-approve
+      run: terraform destroy -auto-approve
       working-directory: ./terraform
