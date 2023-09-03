@@ -10,7 +10,9 @@ for ((CLUSTER_INDEX=1;CLUSTER_INDEX<=${TOTAL_CLUSTERS};CLUSTER_INDEX++)); do
     # Deploy the helloworld and sleep sample services
     kubectl --context="$CONTEXT" create ns sample
     kubectl --context="$CONTEXT" label namespace sample istio-injection=enabled
-    sleep 2; kubectl --context=${CONTEXT} delete -f ~/istio-1.18.2/samples/helloworld/helloworld.yaml -l version=v1 -n sample
+    sleep 1; kubectl --context=${CONTEXT} delete -f ~/istio-1.18.2/samples/helloworld/helloworld.yaml -l service=helloworld -n sample
+    sleep 1; kubectl --context=${CONTEXT} delete -f ~/istio-1.18.2/samples/helloworld/helloworld.yaml -l version=v1 -n sample
+    sleep 1; kubectl --context=${CONTEXT} apply -f ~/istio-1.18.2/samples/helloworld/helloworld.yaml -l service=helloworld -n sample
     sleep 2; kubectl --context=${CONTEXT} apply -f ~/istio-1.18.2/samples/helloworld/helloworld.yaml -l version=v1 -n sample
     #### Generate client and server certificates and keys ####
     mkdir -p app-tls/example_certs/${CLUSTER_NAME}
