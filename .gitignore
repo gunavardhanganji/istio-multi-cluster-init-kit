@@ -1,0 +1,4 @@
+example_certs*
+generate-certs/certs
+install-istio/istiod-values-*
+tmp

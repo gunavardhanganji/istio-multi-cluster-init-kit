@@ -1,0 +1,5 @@
+global:
+  meshID: $MESH_ID
+  multiCluster:
+    clusterName: $CLUSTER_NAME
+  network: $MESH_NETWORK
