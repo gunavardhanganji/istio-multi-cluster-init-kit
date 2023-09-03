@@ -19,7 +19,7 @@ jobs:
         terraform_version: 4.80.0  # Replace with your desired Terraform version
 
     - name: Authenticate with Google Cloud
-      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
