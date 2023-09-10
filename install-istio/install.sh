@@ -39,7 +39,10 @@ for ((CLUSTER_INDEX=1;CLUSTER_INDEX<=${TOTAL_CLUSTERS};CLUSTER_INDEX++)); do
     # Install a remote secret in cluster2 that provides access to cluster1’s API server and vice-versa.
     for ((i=1;i<=${TOTAL_CLUSTERS};i++)); do
         if [ ${i} != ${CLUSTER_INDEX} ]; then
-            istioctl --context="$CONTEXT" x create-remote-secret --name="cluster-${i}" > tmp/cluster-secret-${i}.yaml
+            file_path="tmp/cluster-secret-${i}.yaml"
+            if [ -f "$file_path" ]; then
+                istioctl --context="$CONTEXT" x create-remote-secret --name="cluster-${i}" > tmp/cluster-secret-${i}.yaml
+            fi    
             kubectl --context="$CONTEXT" apply -f tmp/cluster-secret-${i}.yaml
         fi
     done
