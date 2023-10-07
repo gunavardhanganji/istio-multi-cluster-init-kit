@@ -3,6 +3,8 @@ name: Apply Terraform on PR
 on:
   pull_request:
     types: [opened, synchronize]
+    paths:
+      - 'terraform' # Specify the path to your folder here
 
 jobs:
   terraform-plan:
