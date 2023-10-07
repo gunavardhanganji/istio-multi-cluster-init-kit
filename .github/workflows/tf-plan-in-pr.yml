@@ -74,25 +74,21 @@ jobs:
             \`\`\`
   
           </details>
-
-          <details>
             
-            # <summary>Apply Terraform Changes</summary>
-        
-            <p align="left">
-              <button onclick="applyTerraformChanges()">Apply Terraform Changes</button>
-            </p>
-        
-            <script>
-              function applyTerraformChanges() {
-                const confirmation = confirm("Are you sure you want to apply Terraform changes?");
-                if (confirmation) {
-                  console.log("Applying Terraform changes...");
-                }
+          # <summary>Apply Terraform Changes</summary>
+      
+          <p align="left">
+            <button onclick="applyTerraformChanges()">Apply Terraform Changes</button>
+          </p>
+      
+          <script>
+            function applyTerraformChanges() {
+              const confirmation = confirm("Are you sure you want to apply Terraform changes?");
+              if (confirmation) {
+                console.log("Applying Terraform changes...");
               }
-            </script>
-        
-          </details>
+            }
+          </script>
           
           *Pusher: @${{ github.actor }},Workflow: \`${{ github.workflow }}\`*`;
     
