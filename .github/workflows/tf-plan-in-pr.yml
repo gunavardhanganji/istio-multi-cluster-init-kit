@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [opened, synchronize]
     paths:
-      - 'terraform' # Specify the path to your folder here
+      - 'terraform/**' # Specify the path to your folder here
 
 jobs:
   terraform-plan:
