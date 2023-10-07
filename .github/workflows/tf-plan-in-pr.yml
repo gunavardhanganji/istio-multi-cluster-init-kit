@@ -11,14 +11,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Get PR ID
-      id: pr-id
-      shell: bash
-      env:
-        GITHUB_REF: ${{ github.event.pull_request.number }}
-      run: |
-        PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-        echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
+    # - name: Get PR ID
+    #   id: pr-id
+    #   shell: bash
+    #   env:
+    #     GITHUB_REF: ${{ github.event.pull_request.number }}
+    #   run: |
+    #     PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+    #     echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v2
@@ -47,7 +47,7 @@ jobs:
       id: save-artifact
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ steps.pr_id.outputs.PR_NUMBER }}-tf-plan
+        name: ${{ github.event.pull_request.number }}-tf-plan
         path: ./terraform/tfplan
 
     - name: Comment Plan
@@ -55,7 +55,7 @@ jobs:
       uses: peter-evans/create-or-update-comment@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        issue-number: ${{ steps.pr_id.outputs.PR_NUMBER }}
+        issue-number: ${{ github.event.pull_request.number }}
         body: |
           Terraform Plan:
 
@@ -103,7 +103,7 @@ jobs:
       uses: peter-evans/create-or-update-comment@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        issue-number: ${{ steps.pr_id.outputs.PR_NUMBER }}
+        issue-number: ${{ github.event.pull_request.number }}
         body: |
           Terraform Apply:
 
