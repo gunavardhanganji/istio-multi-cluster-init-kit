@@ -54,7 +54,7 @@ jobs:
       id: comment-plan
       uses: peter-evans/create-or-update-comment@v2
       with:
-        token: ${{ inputs.github_token }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         issue-number: ${{ steps.pr_id.outputs.PR_NUMBER }}
         body: |
           Terraform Plan:
