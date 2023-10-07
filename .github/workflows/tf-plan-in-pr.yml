@@ -15,18 +15,20 @@ jobs:
       uses: hashicorp/setup-terraform@v2
     
     - name: Authenticate to Google Cloud
-      id: 'auth'
+      id: auth
       uses: 'google-github-actions/auth@v1'
       with:
         credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
     - name: Terraform Init
+      id: init
       run: terraform init
       working-directory: ./terraform
       
     - name: Terraform Validate
       id: validate
       run: terraform validate -no-color
+      working-directory: ./terraform
 
     # - name: Terraform Plan
     #   id: plan
@@ -47,7 +49,8 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color
+      run: terraform plan
+      working-directory: ./terraform
       continue-on-error: true
       
     - uses: actions/github-script@v6
@@ -72,9 +75,9 @@ jobs:
           #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
           <details><summary>Validation Output</summary>
     
-          \`\`\`\n
-          ${{ steps.validate.outputs.stdout }}
-          \`\`\`
+            \`\`\`\n
+            ${{ steps.validate.outputs.stdout }}
+            \`\`\`
     
           </details>
     
@@ -82,13 +85,14 @@ jobs:
   
           <details><summary>Show Plan</summary>
   
-          \`\`\`\n
-          ${process.env.PLAN}
-          \`\`\`
+            \`\`\`\n
+            # ${process.env.PLAN}
+            ${{ steps.plan.outputs.plan }}
+            \`\`\`
     
           </details>
     
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
     
           // 3. If we have a comment, update it, otherwise create a new one
           if (botComment) {
