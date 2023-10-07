@@ -18,7 +18,7 @@ module "cluster-1-node-pool" {
 module "cluster-2" {
   source = "./modules/k8s-cluster"
   cluster_name = "cluster-2"
-  location = "us-east1-b"
+  location = "us-east1-c"
   project_id = "istiosetup"
 }
 
@@ -26,7 +26,7 @@ module "cluster-2-node-pool" {
     source = "./modules/k8s-node-pool"
     node_pool_name = "cluster-2-node-pool"
     cluster_name = module.cluster-2.cluster_name_output
-    location = "us-east1-b"
+    location = "us-east1-c"
     machine_type = "n1-standard-2"
     service_account = "k8s-sa@istiosetup.iam.gserviceaccount.com"
 }
