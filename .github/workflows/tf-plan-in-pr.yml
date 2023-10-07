@@ -75,7 +75,26 @@ jobs:
             \`\`\`\n
             ${{ steps.plan.outputs.stdout }}
             \`\`\`
-    
+
+            <details>
+            
+            <summary>Apply Terraform Changes</summary>
+        
+            <p align="center">
+              <a href="#" onclick="applyTerraformChanges()">Apply Terraform Changes</a>
+            </p>
+        
+            <script>
+              function applyTerraformChanges() {
+                const confirmation = confirm("Are you sure you want to apply Terraform changes?");
+                if (confirmation) {
+                  console.log("Applying Terraform changes...");
+                }
+              }
+            </script>
+        
+          </details>
+  
           </details>
     
           *Pusher: @${{ github.actor }},Workflow: \`${{ github.workflow }}\`*`;
