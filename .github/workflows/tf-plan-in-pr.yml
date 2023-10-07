@@ -66,14 +66,16 @@ jobs:
     
           #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
   
-          <details>
+           <details>
             <summary>Show Plan</summary>
   
             \`\`\`\n
             ${{ steps.plan.outputs.stdout }}
             \`\`\`
+  
+          </details>
 
-            <details>
+          <details>
             
             # <summary>Apply Terraform Changes</summary>
         
@@ -91,9 +93,7 @@ jobs:
             </script>
         
           </details>
-  
-          </details>
-    
+          
           *Pusher: @${{ github.actor }},Workflow: \`${{ github.workflow }}\`*`;
     
           // 3. If we have a comment, update it, otherwise create a new one
@@ -115,7 +115,7 @@ jobs:
               body: output
             })
           }
-      
+          
     - name: Wait for User Interaction
       run: sleep 120 # Wait for 2 minutes
 
