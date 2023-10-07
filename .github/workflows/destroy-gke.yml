@@ -6,7 +6,7 @@ on:
       - master  # Replace with the branch you want to trigger this workflow on
 
 jobs:
-  create_cluster:
+  destroy_cluster:
     runs-on: ubuntu-latest
 
     steps:
