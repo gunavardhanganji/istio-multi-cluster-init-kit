@@ -51,10 +51,7 @@ jobs:
             repo: context.repo.repo,
             issue_number: context.issue.number,
           })
-          const botComment = comments.find(comment => {
-            return comment.user.type === 'Bot' && comment.body.includes('Terraform Initialization')
-          })
-    
+          
           // 2. Prepare format of the comment
           const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
           #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
@@ -78,10 +75,10 @@ jobs:
 
             <details>
             
-            <summary>Apply Terraform Changes</summary>
+            # <summary>Apply Terraform Changes</summary>
         
-            <p align="center">
-              <a href="#" onclick="applyTerraformChanges()">Apply Terraform Changes</a>
+            <p align="left">
+              <button onclick="applyTerraformChanges()">Apply Terraform Changes</button>
             </p>
         
             <script>
@@ -100,6 +97,9 @@ jobs:
           *Pusher: @${{ github.actor }},Workflow: \`${{ github.workflow }}\`*`;
     
           // 3. If we have a comment, update it, otherwise create a new one
+          const botComment = comments.find(comment => {
+            return comment.user.type === 'Bot' && comment.body.includes('Terraform Initialization')
+          })
           if (botComment) {
             github.rest.issues.updateComment({
               owner: context.repo.owner,
@@ -115,6 +115,9 @@ jobs:
               body: output
             })
           }
+      
+    - name: Wait for User Interaction
+      run: sleep 120 # Wait for 2 minutes
 
   # manual-approval:
   #   runs-on: ubuntu-latest
