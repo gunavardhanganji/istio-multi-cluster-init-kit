@@ -27,7 +27,7 @@ jobs:
       
     - name: Terraform Validate
       id: validate
-      run: terraform validate -no-color
+      run: terraform validate
       working-directory: ./terraform
 
     # - name: Terraform Plan
@@ -87,7 +87,7 @@ jobs:
   
             \`\`\`\n
             # ${process.env.PLAN}
-            ${{ steps.plan.outputs.plan }}
+            ${{ steps.plan.outputs.stdout }}
             \`\`\`
     
           </details>
