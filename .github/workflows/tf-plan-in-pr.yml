@@ -49,7 +49,7 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan
+      run: terraform plan -no-color
       working-directory: ./terraform
       continue-on-error: true
       
@@ -86,7 +86,6 @@ jobs:
           <details><summary>Show Plan</summary>
   
             \`\`\`\n
-            # ${process.env.PLAN}
             ${{ steps.plan.outputs.stdout }}
             \`\`\`
     
