@@ -7,16 +7,24 @@ on:
 jobs:
   terraform-plan:
     runs-on: ubuntu-latest
-
+    if: github.event.review.state != 'approved'
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+
+    - name: Get PR ID
+      id: pr-id
+      shell: bash
+      env:
+        GITHUB_REF: ${{ inputs.github_ref }}
+      run: |
+        PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+        echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v2
     
-    - id: 'auth'
-      name: 'Authenticate to Google Cloud'
+    - name: Authenticate to Google Cloud
+      id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
         credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
@@ -26,18 +34,36 @@ jobs:
       working-directory: ./terraform
 
     - name: Terraform Plan
-      run: terraform plan -out=tfplan
+      id: plan
       working-directory: ./terraform
-      
-    - name: Post Plan
-      uses: exercism/pr-commenter-action@v1.5.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        EXPAND_SUMMARY_DETAILS: 'false' # Override global environment variable; expand details just for this step
+      # working-directory: ${{ inputs.terraform_directory }}
+      shell: bash
+      run: |
+        echo 'plan<<EOF' >> $GITHUB_OUTPUT
+        terraform plan -no-color -out=tfplan >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+
+    - name: Save Artifact
+      id: save-artifact
+      uses: actions/upload-artifact@v3
       with:
-        commenter_type: plan
-        commenter_input: ${{ format('{0}{1}', steps.plan.outputs.stdout, steps.plan.outputs.stderr) }}
-        commenter_exitcode: ${{ steps.plan.outputs.exitcode }}
+        name: ${{ steps.pr_id.outputs.PR_NUMBER }}-tf-plan
+        path: ./terraform/tfplan
+
+    - name: Comment Plan
+      id: comment-plan
+      uses: peter-evans/create-or-update-comment@v2
+      with:
+        token: ${{ inputs.github_token }}
+        issue-number: ${{ steps.pr_id.outputs.PR_NUMBER }}
+        body: |
+          Terraform Plan:
+
+          ```
+          ${{ steps.plan.outputs.plan }}
+          ```
+
+          Plan saved to GH artifacts.
 
   manual-approval:
     runs-on: ubuntu-latest
@@ -63,5 +89,24 @@ jobs:
     needs: [terraform-plan, manual-approval]
 
     steps:
-    - name: Apply Terraform Changes
-      run: terraform apply tfplan -auto-approve
+    - name: Terraform Apply
+      id: apply
+      working-directory: ./terraform
+      shell: bash
+      run: |
+        echo 'apply<<EOF' >> $GITHUB_OUTPUT
+        terraform apply -input=false -no-color tfplan >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+
+    - name: Comment Apply
+      id: comment-apply
+      uses: peter-evans/create-or-update-comment@v2
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        issue-number: ${{ steps.pr_id.outputs.PR_NUMBER }}
+        body: |
+          Terraform Apply:
+
+          ```
+          ${{ steps.apply.outputs.apply }}
+          ```
